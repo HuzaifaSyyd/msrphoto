@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Projects — Videografx</title>
+  <meta name="description" content="Videography project showcase." />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#0a0a0a; --bg-alt:#121212; --text:#e9e9e9; --muted:#b8b8b8;
+      --brand:#66e3c4; --brand-2:#7a8cff; --card:#151515; --stroke:rgba(255,255,255,.08);
+      --shadow:0 10px 30px rgba(0,0,0,.35); --radius:14px; --speed:.6s;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:'Montserrat',system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      color:var(--text);
+      background:#0a0a0a;
+    }
+    .container{width:min(100%,1200px);margin:auto;padding:0 20px}
+    .section{padding:60px 0}
+    h1,h2,h3{margin:0}
+
+    /* Responsive Grid */
+    .grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit, minmax(280px, 1fr));
+      gap:16px;
+    }
+
+    .card{
+      background:var(--card);
+      border:1px solid var(--stroke);
+      border-radius:var(--radius);
+      overflow:hidden;
+      box-shadow:var(--shadow);
+      cursor:pointer;
+      transition:transform .3s ease;
+    }
+    .card:hover{transform:translateY(-4px)}
+    .card-media{position:relative;aspect-ratio:16/9;overflow:hidden}
+    .card-media img, .card-media video{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:block;
+    }
+    .card-media video{
+      object-fit:contain;
+      background:black;
+    }
+    .card-body{padding:14px}
+    .card-body h3{margin-bottom:4px;font-size:18px}
+    .chip{
+      font-size:12px;
+      color:#9bd1ff;
+      background:#0e2233;
+      border:1px solid #1a3a55;
+      padding:4px 10px;
+      border-radius:999px;
+      display:inline-block;
+    }
+
+    /* Modal */
+    .modal{
+      position:fixed;
+      inset:0;
+      display:none;
+      align-items:center;
+      justify-content:center;
+      background:rgba(0,0,0,.7);
+      backdrop-filter:blur(6px);
+      z-index:1000;
+      padding:20px;
+    }
+    .modal.is-open{display:flex}
+    .modal-dialog{
+      background:#000;
+      border-radius:12px;
+      overflow:hidden;
+      max-width:960px;
+      width:100%;
+      aspect-ratio:16/9;
+      position:relative;
+    }
+    .modal-dialog iframe{
+      position:absolute;
+      inset:0;
+      width:100%;
+      height:100%;
+      border:0;
+    }
+    .modal-close{
+      position:absolute;
+      top:8px;
+      right:10px;
+      font-size:28px;
+      color:#fff;
+      background:none;
+      border:none;
+      cursor:pointer;
+    }
+
+    a{color:white;text-decoration:none}
+
+    /* --- Responsive tweaks --- */
+    @media(max-width:768px){
+      .section{padding:40px 0}
+      h2{font-size:22px}
+      .card-body h3{font-size:16px}
+    }
+    @media(max-width:480px){
+      .section{padding:30px 0}
+      h2{font-size:20px}
+      .card-body{padding:10px}
+      .card-body h3{font-size:15px}
+    }
+  </style>
+</head>
+<body>
+  <section class="section">
+    <div class="container">
+      <h4 style="margin-bottom:24px"><a href="/index.html">Back</a></h4>
+      <h2 style="margin-bottom:24px">Projects</h2>
+      <div class="grid">
+        <article class="card" data-video="https://player.vimeo.com/video/76979871">
+          <div class="card-media">
+            <img src="https://images.unsplash.com/photo-1518779578993-ec3579fee39f?q=80&w=1200&auto=format&fit=crop" alt="Video thumbnail">
+          </div>
+          <div class="card-body">
+            <h3>Brand Anthem</h3>
+            <div class="chip">Commercial</div>
+          </div>
+        </article>
+
+        <article class="card" data-video="/assets/video.mp4">
+          <div class="card-media">
+            <video src="/assets/video.mp4" poster="/assets/video.mp4" autoplay ="none"></video>
+          </div>
+          <div class="card-body">
+            <h3>Pre wedding shoot</h3>
+            <div class="chip">Wedding</div>
+          </div>
+        </article>
+
+        
+      </div>
+    </div>
+  </section>
+
+  <!-- Modal -->
+  <div class="modal" id="video-modal">
+    <div class="modal-dialog">
+      <button class="modal-close" aria-label="Close video">&times;</button>
+      <iframe id="modal-frame" allow="autoplay; fullscreen" allowfullscreen></iframe>
+    </div>
+  </div>
+
+  <script>
+    const modal = document.getElementById('video-modal');
+    const iframe = document.getElementById('modal-frame');
+    const closeBtn = modal.querySelector('.modal-close');
+
+    document.querySelectorAll('.card').forEach(card=>{
+      card.addEventListener('click', ()=>{
+        iframe.src = card.dataset.video + (card.dataset.video.includes("?") ? "&autoplay=1" : "?autoplay=1");
+        modal.classList.add('is-open');
+      });
+    });
+
+    closeBtn.addEventListener('click', ()=>{
+      modal.classList.remove('is-open');
+      iframe.src = "";
+    });
+
+    modal.addEventListener('click', e=>{
+      if(e.target===modal){
+        modal.classList.remove('is-open');
+        iframe.src = "";
+      }
+    });
+  </script>
+</body>
+</html>
