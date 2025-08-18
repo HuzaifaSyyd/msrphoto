@@ -19,7 +19,10 @@
       --shadow:0 10px 30px rgba(0,0,0,.35); --radius:14px; --radius-sm:10px; --max:1200px; --speed:.6s;
     }
     *{box-sizing:border-box}
-    html,body{height:100%}
+    html,body{height:100%; 
+  max-width: 100vw;
+  overflow-x: hidden;
+}
     html{scroll-behavior:smooth}
     body{margin:0;font-family:'Montserrat',system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:var(--text);background:linear-gradient(180deg,#070707,#0d0d0d);-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
     img{max-width:100%;display:block}
@@ -34,6 +37,9 @@
     .nav-wrap{display:flex;align-items:center;justify-content:space-between;gap:16px;height:64px}
     .logo{color:#fff;text-decoration:none;font-weight:800;letter-spacing:.8px}
     .nav-menu{display:flex;gap:16px;align-items:center;list-style:none;margin:0;padding:0;transition:transform .3s ease}
+    .nav-close {
+    display: none;
+  }
     .nav-link{color:var(--text);text-decoration:none;opacity:.9}
     .nav-link:hover,.nav-link:focus-visible{opacity:1}
     .nav-toggle{display:none;background:none;border:0;cursor:pointer;width:40px;height:40px}
@@ -141,11 +147,71 @@
 
     /* Utility */
     .nav-open #nav-menu{transform:translateX(0)}
-    @media(max-width:900px){
-      .nav-toggle{display:block}
-      .nav-menu{position:fixed;top:64px;right:0;bottom:0;width:min(86vw,360px);background:#0f0f0f;border-left:1px solid var(--stroke);flex-direction:column;align-items:flex-start;padding:16px;transform:translateX(100%);gap:10px}
-      .nav-menu .btn{width:100%}
-    }
+   @media (max-width: 900px) {
+  .nav-menu {
+    display: none; /* Hidden by default on mobile */
+    position: fixed;
+    top: 64px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100vw;
+    height: calc(100vh - 64px);
+    background: rgba(10,10,10,0.97);
+    border-top: 1px solid var(--stroke);
+    flex-direction: column;
+    padding: 28px 16px 0 16px;
+    z-index: 100;
+    box-sizing: border-box;
+    overflow-y: auto;
+    /* optional animation */
+    transition: opacity 0.3s ease;
+    opacity: 0;
+    pointer-events: none;
+  }
+  body.nav-open .nav-menu {
+    display: flex;
+    opacity: 1;
+    pointer-events: auto;
+  }
+  .nav-toggle {
+    display: block;
+  }
+  .nav-close {
+    display: block;
+  }
+}
+
+
+@media (max-width: 900px) {
+  .nav-toggle {
+    display: block;
+    position: absolute;
+    right: 16px;
+    top: 12px;
+    z-index: 102;
+  }
+  .nav-close {
+    display: none;
+  }
+  body.nav-open .nav-toggle {
+    display: none; /* Hide hamburger when menu is OPEN */
+  }
+  body.nav-open .nav-close {
+    display: block; /* Show close button when menu is OPEN */
+    position: absolute;
+    right: 16px;
+    top: 18px;
+    font-size: 2rem;
+    color: #fff;
+    background: none;
+    border: none;
+    cursor: pointer;
+    z-index: 103;
+  }
+}
+
+
 
 
 
@@ -160,6 +226,9 @@
 @media (max-width: 768px) {
   .card-grid {
     grid-template-columns: 1fr; /* stack in column */
+  }
+  .btn {
+    font-size: 10px;
   }
 }
 
@@ -265,6 +334,22 @@ li{
   list-style: none;
 }
 
+.nav-close {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  background: transparent;
+  border: none;
+  font-size: 2rem;
+  color: #fff;
+  cursor: pointer;
+  z-index: 101;
+}
+.nav-menu {
+  position: fixed;
+  /* ...as you have... */
+}
+
   </style>
 </head>
 <body>
@@ -273,17 +358,25 @@ li{
     <div class="container nav-wrap">
       <a class="logo" href="#hero" aria-label="Go to home"><img src="/assets/logo.jpg" alt=""></a>
       <nav class="nav" aria-label="Primary">
-        <button class="nav-toggle" aria-expanded="false" aria-controls="nav-menu">
-          <span class="line"></span><span class="line"></span><span class="line"></span>
-        </button>
-        <ul id="nav-menu" class="nav-menu">
-          <li><a href="#work" class="nav-link">portfolio</a></li>
-          <li><a href="#services" class="nav-link">Services</a></li>
-          <li><a href="#about" class="nav-link">About</a></li>
-          <li><a href="#faqs" class="nav-link">FAQs</a></li>
-          <li><a href="#contact" class="nav-link">Contact</a></li>
-        </ul>
-      </nav>
+  <!-- Hamburger -->
+  <button class="nav-toggle" aria-expanded="false" aria-controls="nav-menu">
+    <span class="line"></span>
+    <span class="line"></span>
+    <span class="line"></span>
+  </button>
+
+  <!-- Close button (moved outside) -->
+  <button class="nav-close" aria-label="Close menu">&times;</button>
+
+  <!-- Menu -->
+  <ul id="nav-menu" class="nav-menu">
+    <li><a href="#work" class="nav-link">Portfolio</a></li>
+    <li><a href="#services" class="nav-link">Services</a></li>
+    <li><a href="#about" class="nav-link">About</a></li>
+    <li><a href="#faqs" class="nav-link">FAQs</a></li>
+    <li><a href="#contact" class="nav-link">Contact</a></li>
+  </ul>
+</nav>
     </div>
   </header>
 
@@ -317,46 +410,78 @@ li{
         <button class="tab is-active" role="tab" aria-selected="true" data-filter="all">All</button>
         <button class="tab" role="tab" aria-selected="false" data-filter="commercial">Commercial</button>
         <button class="tab" role="tab" aria-selected="false" data-filter="wedding">Wedding</button>
-        <button class="tab" role="tab" aria-selected="false" data-filter="music">Music</button>
-        <button class="tab" role="tab" aria-selected="false" data-filter="documentary">Documentary</button>
+        <button class="tab" role="tab" aria-selected="false" data-filter="Nature">Nature</button>
+        <button class="tab" role="tab" aria-selected="false" data-filter="Models">Models</button>
       </div>
 
       <div class="grid" id="portfolio-grid">
         <!-- Card examples (replace images with your own) -->
         <article class="card"  class="card" data-category="wedding" data-reveal style="--d:.05s">
             <div class="card-media">
-                <video src="/assets/video.mp4" poster="/assets/video.mp4" autoplay preload="none"></video>
+                <video 
+              src="/assets/video.mp4"
+              autoplay 
+              muted 
+              loop 
+              playsinline 
+              preload="auto"
+              class="video-thumb"
+            ></video>
             </div>
             <div class="card-body">
                 <h3>Pre wedding shoot</h3>
                 <div class="chip">Wedding</div>
             </div>
         </article>
-        <article class="card"  class="card" data-category="wedding" data-reveal style="--d:.05s">
+        <article class="card"  class="card" data-category="Models" data-reveal style="--d:.05s">
             <div class="card-media">
-                <video src="https://videos.pexels.com/video-files/10649788/10649788-uhd_2732_1440_25fps.mp4" poster="https://videos.pexels.com/video-files/10649788/10649788-uhd_2732_1440_25fps.mp4" autoplay preload="none"></video>
+                <video 
+              src="https://videos.pexels.com/video-files/10649788/10649788-uhd_2732_1440_25fps.mp4"
+              autoplay 
+              muted 
+              loop 
+              playsinline 
+              preload="auto"
+              class="video-thumb"
+            ></video>
             </div>
             <div class="card-body">
-                <h3>Pre wedding shoot</h3>
-                <div class="chip">Wedding</div>
+                <h3>Couple</h3>
+                <div class="chip">Models</div>
             </div>
         </article>
-        <article class="card"  class="card" data-category="wedding" data-reveal style="--d:.05s">
+        <article class="card"  class="card" data-category="nature" data-reveal style="--d:.05s">
             <div class="card-media">
-                <video src="https://cdn.pixabay.com/video/2022/07/31/126224-735976622_large.mp4" poster="https://cdn.pixabay.com/video/2022/07/31/126224-735976622_large.mp4" autoplay preload="none"></video>
+                <video 
+              src="https://cdn.pixabay.com/video/2022/07/31/126224-735976622_large.mp4"
+              autoplay 
+              muted 
+              loop 
+              playsinline 
+              preload="auto"
+              class="video-thumb"
+            ></video>
             </div>
             <div class="card-body">
-                <h3>Pre wedding shoot</h3>
-                <div class="chip">Wedding</div>
+                <h3>Nature </h3>
+                <div class="chip">Nature</div>
             </div>
         </article>
-        <article class="card"  class="card" data-category="wedding" data-reveal style="--d:.05s">
+        <article class="card"  class="card" data-category="nature" data-reveal style="--d:.05s">
             <div class="card-media">
-                <video src="https://cdn.pixabay.com/video/2024/08/03/224696_large.mp4" poster="https://cdn.pixabay.com/video/2024/08/03/224696_large.mp4" autoplay loop preload="none"></video>
+              <video 
+              src="https://cdn.pixabay.com/video/2024/08/03/224696_large.mp4"
+              autoplay 
+              muted 
+              loop 
+              playsinline 
+              preload="auto"
+              class="video-thumb"
+            ></video>
             </div>
             <div class="card-body">
-                <h3>Pre wedding shoot</h3>
-                <div class="chip">Wedding</div>
+                <h3>City</h3>
+                <div class="chip">Nature</div>
             </div>
         </article>
 
@@ -525,90 +650,81 @@ li{
   </footer>
 
   <script>
-    (function(){
-      const $ = (sel, ctx=document) => ctx.querySelector(sel);
-      const $$ = (sel, ctx=document) => Array.from(ctx.querySelectorAll(sel));
+(function(){
+  const $ = (sel, ctx=document) => ctx.querySelector(sel);
+  const $$ = (sel, ctx=document) => Array.from(ctx.querySelectorAll(sel));
 
-      // Footer year
-      const y = $('#year'); if (y) y.textContent = new Date().getFullYear();
+  // Footer year
+  const y = $('#year'); 
+  if (y) y.textContent = new Date().getFullYear();
 
-      // Mobile nav toggle
-      const body = document.body;
-      const navToggle = $('.nav-toggle');
-      const navMenu = $('#nav-menu');
-      if (navToggle && navMenu) {
-        navToggle.addEventListener('click', () => {
-          const open = !body.classList.contains('nav-open');
-          body.classList.toggle('nav-open');
-          navToggle.setAttribute('aria-expanded', String(open));
-        });
-        // Close on link click (mobile)
-        $$('#nav-menu a').forEach(a => a.addEventListener('click', () => {
-          if (body.classList.contains('nav-open')) {
-            body.classList.remove('nav-open');
-            navToggle.setAttribute('aria-expanded', 'false');
-          }
-        }));
-      }
+  // Mobile nav toggle
+  const body = document.body;
+const navToggle = document.querySelector('.nav-toggle');
+const navClose = document.querySelector('.nav-close');
+const navMenu = document.querySelector('#nav-menu');
 
-      // Scroll reveal
-      const revealEls = $$('[data-reveal]');
-      if ('IntersectionObserver' in window) {
-        const io = new IntersectionObserver((entries)=>{
-          entries.forEach(entry=>{
-            if (entry.isIntersecting) {
-              entry.target.classList.add('is-visible');
-              io.unobserve(entry.target);
-            }
-          });
-        },{threshold:0.15});
-        revealEls.forEach(el=>io.observe(el));
-      } else {
-        // Fallback
-        revealEls.forEach(el=>el.classList.add('is-visible'));
-      }
+if (navToggle && navMenu) {
+  // Open menu when hamburger clicked
+  navToggle.addEventListener('click', () => {
+    body.classList.add('nav-open');
+    navToggle.setAttribute('aria-expanded', 'true');
+  });
 
-      // Filter tabs
-      const tabs = $$('.tab');
-      const cards = $$('#portfolio-grid .card');
-      function filter(category) {
-        cards.forEach(card => {
-          const match = category==='all' || card.dataset.category===category;
-          card.style.display = match ? '' : 'none';
-        });
-      }
-      tabs.forEach(tab => tab.addEventListener('click', ()=>{
-        tabs.forEach(t=>t.classList.remove('is-active'));
-        tab.classList.add('is-active');
-        tabs.forEach(t=>t.setAttribute('aria-selected', String(t===tab)));
-        filter(tab.dataset.filter);
-      }));
+  // Close menu when X clicked
+  if (navClose) {
+    navClose.addEventListener('click', () => {
+      body.classList.remove('nav-open');
+      navToggle.setAttribute('aria-expanded', 'false');
+    });
+  }
 
-      // Modal video
-      const modal = $('#video-modal');
-      const iframe = $('#modal-frame');
-      function openModal(src){
-        if (!modal || !iframe) return;
-        iframe.src = src + (src.includes('?') ? '&' : '?') + 'autoplay=1';
-        modal.classList.add('is-open');
-        modal.setAttribute('aria-hidden','false');
-        document.addEventListener('keydown', escClose);
-      }
-      function closeModal(){
-        if (!modal || !iframe) return;
-        modal.classList.remove('is-open');
-        modal.setAttribute('aria-hidden','true');
-        iframe.src = '';
-        document.removeEventListener('keydown', escClose);
-      }
-      function escClose(e){ if(e.key === 'Escape') closeModal(); }
-      $$('#portfolio-grid .play').forEach(btn => btn.addEventListener('click', () => openModal(btn.dataset.video)));
-      $$('#video-modal [data-close]').forEach(el => el.addEventListener('click', closeModal));
+  // Close menu when clicking a link
+  document.querySelectorAll('#nav-menu a').forEach(a =>
+    a.addEventListener('click', () => {
+      body.classList.remove('nav-open');
+      navToggle.setAttribute('aria-expanded', 'false');
+    })
+  );
+}
 
-      // Defensive: ensure content not stuck invisible if JS loads late
-      // Make all reveal elements visible after 2s as a failsafe
-      setTimeout(()=>{ revealEls.forEach(el=>el.classList.add('is-visible')); }, 2000);
-    })();
-  </script>
+
+
+  // Scroll reveal
+  const revealEls = $$('[data-reveal]');
+  if ('IntersectionObserver' in window) {
+    const io = new IntersectionObserver((entries)=>{
+      entries.forEach(entry=>{
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+          io.unobserve(entry.target);
+        }
+      });
+    },{threshold:0.15});
+    revealEls.forEach(el=>io.observe(el));
+  } else {
+    revealEls.forEach(el=>el.classList.add('is-visible'));
+  }
+
+  // Filter tabs
+  const tabs = $$('.tab');
+  const cards = $$('#portfolio-grid .card');
+  function filter(category) {
+    cards.forEach(card => {
+      const match = category === 'all' || card.dataset.category === category;
+      card.style.display = match ? '' : 'none';
+    });
+  }
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      tabs.forEach(t => t.classList.remove('is-active'));
+      tab.classList.add('is-active');
+      filter(tab.dataset.filter);
+    });
+  });
+
+})();
+</script>
+
 </body>
 </html>
