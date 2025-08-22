@@ -33,17 +33,89 @@
     .section-head p{margin:0;color:var(--muted)}
 
     /* Header */
-    .site-header{position:sticky;top:0;z-index:50;background:rgba(10,10,10,.6);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--stroke)}
-    .nav-wrap{display:flex;align-items:center;justify-content:space-between;gap:16px;height:64px}
-    .logo{color:#fff;text-decoration:none;font-weight:800;letter-spacing:.8px}
-    .nav-menu{display:flex;gap:16px;align-items:center;list-style:none;margin:0;padding:0;transition:transform .3s ease}
-    .nav-close {
-    display: none;
+    .header {
+  width: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background: rgba(0,0,0,0.8);
+  backdrop-filter: blur(8px);
+  z-index: 1000;
+}
+
+.header .container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #fff;
+}
+.logo span {
+  color: #ff0055;
+}
+
+/* Navbar Desktop */
+.nav ul {
+  display: flex;
+  gap: 2rem;
+}
+.nav ul li a {
+  color: #fff;
+  text-decoration: none;
+  font-weight: 500;
+  transition: 0.3s;
+}
+.nav ul li a:hover {
+  color: #ff0055;
+}
+
+/* Hamburger */
+.hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  cursor: pointer;
+}
+.hamburger span {
+  width: 25px;
+  height: 3px;
+  background: #fff;
+  transition: 0.3s;
+}
+
+/* ===== Mobile Styles ===== */
+@media (max-width: 768px) {
+  .nav {
+    position: fixed;
+    top: 0;
+    right: -100%;
+    width: 70%;
+    height: 100vh;
+    background: rgba(0,0,0,0.95);
+    backdrop-filter: blur(8px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: right 0.4s ease-in-out;
   }
-    .nav-link{color:var(--text);text-decoration:none;opacity:.9}
-    .nav-link:hover,.nav-link:focus-visible{opacity:1}
-    .nav-toggle{display:none;background:none;border:0;cursor:pointer;width:40px;height:40px}
-    .nav-toggle .line{display:block;height:2px;background:#fff;margin:7px 0;border-radius:2px}
+  .nav ul {
+    flex-direction: column;
+    gap: 2rem;
+  }
+  .hamburger {
+    display: flex;
+  }
+  .nav.active {
+    right: 0;
+  }
+}
 
     /* Buttons */
     .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:44px;padding:0 18px;border-radius:999px;border:1px solid var(--stroke);text-decoration:none;color:#fff;transition:transform .2s ease, box-shadow .2s ease, background .2s ease, border-color .2s ease}
@@ -146,75 +218,17 @@
     .is-visible{transform:translateY(0);opacity:1}
 
     /* Utility */
-    .nav-open #nav-menu{transform:translateX(0)}
-   @media (max-width: 900px) {
-  .nav-menu {
-    display: none; /* Hidden by default on mobile */
-    position: fixed;
-    top: 64px;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    width: 100vw;
-    height: calc(100vh - 64px);
-    background: rgba(10,10,10,0.97);
-    border-top: 1px solid var(--stroke);
-    flex-direction: column;
-    padding: 28px 16px 0 16px;
-    z-index: 100;
-    box-sizing: border-box;
-    overflow-y: auto;
-    /* optional animation */
-    transition: opacity 0.3s ease;
-    opacity: 0;
-    pointer-events: none;
-  }
-  body.nav-open .nav-menu {
-    display: flex;
-    opacity: 1;
-    pointer-events: auto;
-  }
-  .nav-toggle {
-    display: block;
-  }
-  .nav-close {
-    display: block;
-  }
-	   .footer-inner{display:flex;
+ 
+
+   .footer-inner{display:flex;
     flex-direction: column;
     justify-content:space-between;
     align-items:center;
     gap:10px}
-}
 
 
-@media (max-width: 900px) {
-  .nav-toggle {
-    display: block;
-    position: absolute;
-    right: 16px;
-    top: 12px;
-    z-index: 102;
-  }
-  .nav-close {
-    display: none;
-  }
-  body.nav-open .nav-toggle {
-    display: none; /* Hide hamburger when menu is OPEN */
-  }
-  body.nav-open .nav-close {
-    display: block; /* Show close button when menu is OPEN */
-    position: absolute;
-    right: 16px;
-    top: 18px;
-    font-size: 2rem;
-    color: #fff;
-    background: none;
-    border: none;
-    cursor: pointer;
-    z-index: 103;
-  }
-}
+
+
 
 
 
@@ -269,6 +283,10 @@
 
 .green:hover{
  background: #25D366; /* WhatsApp green */
+}
+
+.red:hover{
+ background: red; /* WhatsApp green */
 }
 
 .logo img {
@@ -339,62 +357,81 @@ li{
   list-style: none;
 }
 
-.nav-close {
-  position: absolute;
-  top: 18px;
-  right: 18px;
-  background: transparent;
-  border: none;
-  font-size: 2rem;
-  color: #fff;
-  cursor: pointer;
-  z-index: 101;
+.logo img {
+  height: 25px;   /* adjust size */
+  width: 100px;
+  
 }
-.nav-menu {
-  position: fixed;
-  /* ...as you have... */
+.subhead {
+  font-size: 20px;
+  font-weight: 600;
+  color: white;
 }
+#typing {
+  border-right: 2px solid white;
+  padding-right: 5px;
+  animation: blink 0.7s infinite;
+}
+
+@keyframes blink {
+  50% {
+    border-color: transparent;
+  }
+}
+
+
+.contact-card a {
+  text-decoration: none;
+  color: white;
+}
+
 
   </style>
 </head>
 <body>
   <!-- Header -->
-  <header class="site-header" data-reveal>
-    <div class="container nav-wrap">
-      <a class="logo" href="#hero" aria-label="Go to home"><img src="/assets/logo.jpg" alt=""></a>
-      <nav class="nav" aria-label="Primary">
-  <!-- Hamburger -->
-  <button class="nav-toggle" aria-expanded="false" aria-controls="nav-menu">
-    <span class="line"></span>
-    <span class="line"></span>
-    <span class="line"></span>
-  </button>
+  <!-- ✅ HEADER START -->
+<header class="header">
+  <div class="container">
+    <!-- Logo -->
+    <a href="#" class="logo">
+      <img src="assets/Msrlogo.png" alt="MSR" />
+    </a>
 
-  <!-- Close button (moved outside) -->
-  <button class="nav-close" aria-label="Close menu">&times;</button>
+    <!-- Navbar -->
+    <nav class="nav" id="nav-menu">
+      <ul>
+        <li><a href="#hero">Home</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#services">Services</a></li>
+        <li><a href="#portfolio">Portfolio</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </nav>
 
-  <!-- Menu -->
-  <ul id="nav-menu" class="nav-menu">
-    <li><a href="#work" class="nav-link">Portfolio</a></li>
-    <li><a href="#services" class="nav-link">Services</a></li>
-    <li><a href="#about" class="nav-link">About</a></li>
-    <li><a href="#faqs" class="nav-link">FAQs</a></li>
-    <li><a href="#contact" class="nav-link">Contact</a></li>
-  </ul>
-</nav>
+    <!-- Hamburger -->
+    <div class="hamburger" id="hamburger">
+      <span></span>
+      <span></span>
+      <span></span>
     </div>
-  </header>
+  </div>
+</header>
+<!-- ✅ HEADER END -->
+
 
   <!-- Hero -->
   <section id="hero" class="hero section">
     <!-- Optional: swap to your own hosted mp4; below is a public sample video. -->
-    <video class="hero-video" autoplay loop muted playsinline poster="/assets/Msrmainvid.mp4">
-      <source src="/assets/Msrmainvid.mp4" type="video/mp4">
+    <video class="hero-video" autoplay loop muted playsinline poster="/assets/mainvid.mp4">
+      <source src="/assets/mainvid.mp4" type="video/mp4">
       Your browser does not support the video tag.
     </video>
     <div class="container hero-inner">
       <h1 class="headline" data-reveal style="--d:0s">MSR GRAPHY</h1>
-      <p class="subhead" data-reveal style="--d:.1s">cinematographer</p>
+      <p class="subhead" data-reveal style="--d:.1s">
+  <span id="typing"></span>
+</p>
       <div class="hero-cta" data-reveal style="--d:.2s">
         <a href="/projects.html" class="btn btn-primary">View Portfolio</a>
         <a href="#contact" class="btn btn-ghost">Book a Shoot</a>
@@ -545,16 +582,12 @@ li{
 
     <!-- Right side content -->
     <div class="about-body" data-reveal style="--d:.05s">
-      <h2>About Me</h2>
-      <p>MSR is A Creative Direction, <br>Cinematographer</h2>
-	        With a passion for storytelling through the lens, I specialize in creating visually 
-					compelling narratives that evoke emotion and leave a lasting impact. Over the past decade, I’ve worked on
-					 commercials, music videos, documentaries, and feature films, blending technical precision with artistic
-					  vision.  
-						Every frame I capture is designed to transport the audience—whether 
-						it’s the intimacy of a close-up, the grandeur of a sweeping landscape, or
-						 the raw energy of a live performance. My work is not just about filming; 
-						 it’s about capturing the soul of the story.</p>
+      <h2>About MSR</h2>
+      <p>MSR is A Creative Direction, Cinematographer</h2><br>
+	        I believe every wedding has its own story, and my job is to capture it in the most natural and beautiful way.
+           Through my lens, I focus on real emotions—the laughter, the tears, the little glances—that make your day truly yours.
+            For me, it’s not just about filming a wedding, it’s about preserving memories you’ll hold close forever. 
+          From intimate moments to grand celebrations, I aim to create films that feel personal, timeless, and full of heart.</p>
       
       
 
@@ -600,7 +633,7 @@ li{
         </details>
         <details>
           <summary>Do you travel for shoots?</summary>
-          <p>Yes — available worldwide. Travel and per diem billed at cost.</p>
+          <p>Yes — available in India. Travel and per diem will be billed at cost, with all travel and food expenses borne by the client.</p>
         </details>
         <details>
           <summary>How do you price projects?</summary>
@@ -626,8 +659,11 @@ li{
         +91 7888274941
         <p>Whatsapp Me</p>
       </a>
-      <div class="contact-card">iam.mansoor48@gmail.com</div>
+      <div class="contact-card red"><a href="mailto:iam.mansoor48@gmail.com?subject=Quote%20Request&body=Hey%20Msr%2C%20I%20want%20to%20know%20the%20quote.">
+    iam.mansoor48@gmail.com
+  </a></div>
       <div class="contact-card">msrgraphy.in</div>
+      
     </div>
   </div>
 </section>
@@ -682,34 +718,25 @@ li{
   if (y) y.textContent = new Date().getFullYear();
 
   // Mobile nav toggle
-  const body = document.body;
-const navToggle = document.querySelector('.nav-toggle');
-const navClose = document.querySelector('.nav-close');
-const navMenu = document.querySelector('#nav-menu');
 
-if (navToggle && navMenu) {
-  // Open menu when hamburger clicked
-  navToggle.addEventListener('click', () => {
-    body.classList.add('nav-open');
-    navToggle.setAttribute('aria-expanded', 'true');
+   const hamburger = document.getElementById("hamburger");
+  const navMenu = document.getElementById("nav-menu");
+
+  // Toggle on hamburger click
+  hamburger.addEventListener("click", () => {
+    navMenu.classList.toggle("active");
+    hamburger.classList.toggle("active");
   });
 
-  // Close menu when X clicked
-  if (navClose) {
-    navClose.addEventListener('click', () => {
-      body.classList.remove('nav-open');
-      navToggle.setAttribute('aria-expanded', 'false');
+  // Close nav when any link is clicked
+  document.querySelectorAll(".nav ul li a").forEach(link => {
+    link.addEventListener("click", () => {
+      navMenu.classList.remove("active");
+      hamburger.classList.remove("active");
     });
-  }
+  });
 
-  // Close menu when clicking a link
-  document.querySelectorAll('#nav-menu a').forEach(a =>
-    a.addEventListener('click', () => {
-      body.classList.remove('nav-open');
-      navToggle.setAttribute('aria-expanded', 'false');
-    })
-  );
-}
+
 
 
 
@@ -746,6 +773,37 @@ if (navToggle && navMenu) {
     });
   });
 
+})();
+
+  //Typing Effect
+ const texts = [
+  "cinematographer",
+  "wedding cinematographer",
+  "model shoot"
+];
+
+let count = 0;
+let index = 0;
+let currentText = '';
+let letter = '';
+const typingElement = document.getElementById('typing');
+
+(function type() {
+  if (count === texts.length) {
+    count = 0;
+  }
+  currentText = texts[count];
+  letter = currentText.slice(0, ++index);
+
+  typingElement.textContent = letter;
+
+  if (letter.length === currentText.length) {
+    count++;
+    index = 0;
+    setTimeout(type, 1000); // wait before next word
+  } else {
+    setTimeout(type, 120); // typing speed
+  }
 })();
 </script>
 
