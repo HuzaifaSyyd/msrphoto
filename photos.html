@@ -1,0 +1,312 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>msrgraphy</title>
+  <meta name="description" content="Mixed portrait & landscape gallery with modal viewer." />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg:#0a0a0a; --bg-alt:#121212; --text:#e9e9e9; --muted:#b8b8b8;
+      --brand:#66e3c4; --brand-2:#7a8cff; --card:#151515; --stroke:rgba(255,255,255,.08);
+      --shadow:0 10px 30px rgba(0,0,0,.35); --radius:14px; --speed:.6s;
+
+      /* Masonry tuning */
+      --gap:5px;       /* 5px gap */
+      --row:5px;     /* larger base row = bigger cards */
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:'Montserrat',system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      color:var(--text);
+      background:var(--bg);
+    }
+    a{color:#fff;text-decoration:none}
+    .container{width:min(100%,1200px);margin:auto;padding:0 20px}
+    .section{padding:40px 0}
+    h1,h2,h3,h4{margin:0}
+
+    .actions{ display:flex; gap:12px; align-items:center; }
+
+    .btn{
+      background:linear-gradient(135deg,var(--brand),var(--brand-2));
+      color:#001;
+      border:none; border-radius:999px; padding:10px 14px; font-weight:600; cursor:pointer;
+      box-shadow:var(--shadow);
+    }
+    .btn.secondary{
+      background:transparent; color:var(--text);
+      border:1px solid var(--stroke);
+    }
+
+    /* Masonry Grid — 4 columns desktop */
+    .grid{
+      display:grid;
+      grid-template-columns:repeat(3, 1fr);
+      grid-auto-rows:var(--row);
+      gap:var(--gap);
+    }
+    @media (max-width:992px){ .grid{ grid-template-columns:repeat(3, 1fr); } }
+    @media (max-width:768px){ .grid{ grid-template-columns:repeat(2, 1fr); } }
+    @media (max-width:480px){ .grid{ grid-template-columns:1fr; } }
+
+    .card{
+      background:var(--card);
+      border:1px solid var(--stroke);
+      border-radius:var(--radius);
+      overflow:hidden;
+      box-shadow:var(--shadow);
+      cursor:pointer;
+      transition:transform .2s ease;
+    }
+    .card:hover{ transform:translateY(-3px) }
+    .card-media img{ width:100%; height:auto; display:block; background:#000; }
+    .card-body{ padding:6px }
+    .meta{ font-size:12px; color:var(--muted) }
+
+    /* Modal */
+    .modal{
+      position:fixed; inset:0; display:none; align-items:center; justify-content:center;
+      background:rgba(0,0,0,.7); backdrop-filter:blur(6px); z-index:1000; padding:20px;
+    }
+    .modal.is-open{ display:flex }
+    .modal-dialog{
+      position:relative; display:inline-flex; align-items:center; justify-content:center;
+      background:#000; border-radius:12px; border:1px solid var(--stroke);
+      max-width:96vw; max-height:90vh; overflow:hidden;
+    }
+    .modal-img{ max-width:96vw; max-height:90vh; width:auto; height:auto; display:block; }
+    .modal-close{
+      position:absolute; top:8px; right:10px; font-size:28px; color:#fff;
+      background:none; border:none; cursor:pointer;
+    }
+    .modal-actions{
+      position:absolute; left:10px; bottom:10px; right:10px;
+      display:flex; justify-content:space-between; align-items:center;
+      color:#ddd; font-size:14px;
+    }
+  </style>
+</head>
+<body>
+  <section class="section">
+    <div class="container">
+      <h4 style="margin-bottom:24px; display:flex; justify-content:space-between; align-items:center;">
+        <a href="/index.html">Back</a>
+        <button class="btn secondary"><a href="/projects.html" style="color:inherit; text-decoration:none;">Videos</a></button>
+      </h4>
+
+      <!-- Gallery Grid -->
+      <div id="grid" class="grid">
+        <figure class="card">
+          <div class="card-media">
+            <img src="/assets/Photos/image1.jpg" alt="Sample landscape" loading="lazy">
+          </div>
+          <figcaption class="card-body meta">Landscape sample</figcaption>
+        </figure>
+        <figure class="card">
+          <div class="card-media">
+            <img src="/assets/Photos/image2.jpg" alt="Sample landscape" loading="lazy">
+          </div>
+          <figcaption class="card-body meta">Landscape sample</figcaption>
+        </figure>
+        <figure class="card">
+          <div class="card-media">
+            <img src="/assets/Photos/image3.jpg" alt="Sample landscape" loading="lazy">
+          </div>
+          <figcaption class="card-body meta">Landscape sample</figcaption>
+        </figure>
+        <figure class="card">
+          <div class="card-media">
+            <img src="/assets/Photos/image4.jpg" alt="Sample landscape" loading="lazy">
+          </div>
+          <figcaption class="card-body meta">Landscape sample</figcaption>
+        </figure>
+        <figure class="card">
+          <div class="card-media">
+            <img src="/assets/Photos/image5.jpg" alt="Sample landscape" loading="lazy">
+          </div>
+          <figcaption class="card-body meta">Landscape sample</figcaption>
+        </figure>
+        <figure class="card">
+          <div class="card-media">
+            <img src="/assets/Photos/image6.jpg" alt="Sample landscape" loading="lazy">
+          </div>
+          <figcaption class="card-body meta">Landscape sample</figcaption>
+        </figure>
+        <figure class="card">
+          <div class="card-media">
+            <img src="/assets/Photos/image7.jpg" alt="Sample landscape" loading="lazy">
+          </div>
+          <figcaption class="card-body meta">Landscape sample</figcaption>
+        </figure>
+        <figure class="card">
+          <div class="card-media">
+            <img src="/assets/Photos/image8.jpg" alt="Sample landscape" loading="lazy">
+          </div>
+          <figcaption class="card-body meta">Landscape sample</figcaption>
+        </figure>
+        <figure class="card">
+          <div class="card-media">
+            <img src="/assets/Photos/image9.jpg" alt="Sample landscape" loading="lazy">
+          </div>
+          <figcaption class="card-body meta">Landscape sample</figcaption>
+        </figure>
+        <figure class="card">
+          <div class="card-media">
+            <img src="/assets/Photos/image10.jpg" alt="Sample landscape" loading="lazy">
+          </div>
+          <figcaption class="card-body meta">Landscape sample</figcaption>
+        </figure>
+        <figure class="card">
+          <div class="card-media">
+            <img src="/assets/Photos/image11.jpg" alt="Sample landscape" loading="lazy">
+          </div>
+          <figcaption class="card-body meta">Landscape sample</figcaption>
+        </figure>
+        <figure class="card">
+          <div class="card-media">
+            <img src="/assets/Photos/image12.jpg" alt="Sample landscape" loading="lazy">
+          </div>
+          <figcaption class="card-body meta">Landscape sample</figcaption>
+        </figure>
+        <figure class="card">
+          <div class="card-media">
+            <img src="/assets/Photos/image13.jpg" alt="Sample landscape" loading="lazy">
+          </div>
+          <figcaption class="card-body meta">Landscape sample</figcaption>
+        </figure>
+        <figure class="card">
+          <div class="card-media">
+            <img src="/assets/Photos/image14.jpg" alt="Sample landscape" loading="lazy">
+          </div>
+          <figcaption class="card-body meta">Landscape sample</figcaption>
+        </figure>
+        <figure class="card">
+          <div class="card-media">
+            <img src="/assets/Photos/image15.jpg" alt="Sample landscape" loading="lazy">
+          </div>
+          <figcaption class="card-body meta">Landscape sample</figcaption>
+        </figure>
+        <figure class="card">
+          <div class="card-media">
+            <img src="/assets/Photos/image16.jpg" alt="Sample landscape" loading="lazy">
+          </div>
+          <figcaption class="card-body meta">Landscape sample</figcaption>
+        </figure>
+        <figure class="card">
+          <div class="card-media">
+            <img src="/assets/Photos/image17.jpg" alt="Sample landscape" loading="lazy">
+          </div>
+          <figcaption class="card-body meta">Landscape sample</figcaption>
+        </figure>
+        <figure class="card">
+          <div class="card-media">
+            <img src="/assets/Photos/image18.jpg" alt="Sample landscape" loading="lazy">
+          </div>
+          <figcaption class="card-body meta">Landscape sample</figcaption>
+        </figure>
+        <figure class="card">
+          <div class="card-media">
+            <img src="/assets/Photos/image19.jpg" alt="Sample landscape" loading="lazy">
+          </div>
+          <figcaption class="card-body meta">Landscape sample</figcaption>
+        </figure>
+        <figure class="card">
+          <div class="card-media">
+            <img src="/assets/Photos/image20.jpg" alt="Sample landscape" loading="lazy">
+          </div>
+          <figcaption class="card-body meta">Landscape sample</figcaption>
+        </figure>
+       
+      </div>
+    </div>
+  </section>
+
+  <!-- Modal Viewer -->
+  <div class="modal" id="img-modal" aria-hidden="true">
+    <div class="modal-dialog">
+      <button class="modal-close" aria-label="Close">&times;</button>
+      <img id="modal-img" class="modal-img" alt="">
+      <div class="modal-actions">
+        <span id="modal-meta"></span>
+        <a id="downloadLink" class="btn" download>Download</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    /** Masonry sizing */
+    const grid = document.getElementById('grid');
+
+    function getGridMetrics(){
+      const cs = getComputedStyle(grid);
+      const row  = parseFloat(cs.gridAutoRows) || 200; // bigger rows
+      const gapY = parseFloat(cs.rowGap || cs.gap) || 5;
+      return { row, gapY };
+    }
+
+    function sizeCard(card){
+      const { row, gapY } = getGridMetrics();
+      const media = card.querySelector('.card-media');
+      const body  = card.querySelector('.card-body');
+      const total = (media?.offsetHeight || 0) + (body?.offsetHeight || 0);
+      const span  = Math.ceil((total + gapY) / (row + gapY));
+      card.style.gridRowEnd = `span ${span}`;
+    }
+
+    function sizeAll(){ grid.querySelectorAll('.card').forEach(sizeCard); }
+
+    window.addEventListener('load', sizeAll);
+    window.addEventListener('resize', sizeAll);
+
+    const ro = new ResizeObserver(entries=>{
+      for(const entry of entries){
+        const card = entry.target.closest('.card');
+        if(card) sizeCard(card);
+      }
+    });
+
+    grid.querySelectorAll('.card img').forEach(img=>{
+      if(!img.complete){
+        img.addEventListener('load', ()=> sizeCard(img.closest('.card')));
+      }
+      ro.observe(img);
+    });
+
+    /** Modal logic */
+    const modal = document.getElementById('img-modal');
+    const modalImg = document.getElementById('modal-img');
+    const modalMeta = document.getElementById('modal-meta');
+    const downloadLink = document.getElementById('downloadLink');
+    const closeBtn = modal.querySelector('.modal-close');
+
+    function openModalFor(img){
+      modalImg.src = img.src;
+      modalImg.alt = img.alt || '';
+      const updateMeta = () => {
+        modalMeta.textContent = (img.naturalWidth && img.naturalHeight)
+          ? `${img.naturalWidth}×${img.naturalHeight}` : 'Preview';
+      };
+      if(img.complete) updateMeta(); else img.addEventListener('load', updateMeta, { once:true });
+
+      downloadLink.href = img.src;
+      modal.classList.add('is-open');
+    }
+
+    grid.addEventListener('click', (e)=>{
+      const card = e.target.closest('.card');
+      if(!card) return;
+      openModalFor(card.querySelector('img'));
+    });
+
+    function closeModal(){ modal.classList.remove('is-open'); modalImg.src = ''; }
+    closeBtn.addEventListener('click', closeModal);
+    modal.addEventListener('click', e=>{ if(e.target===modal) closeModal(); });
+    window.addEventListener('keydown', e=>{ if(e.key==="Escape") closeModal(); });
+  </script>
+</body>
+</html>
